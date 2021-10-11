@@ -17,7 +17,7 @@ public class SymbolTableBSTImpl implements SymbolTable{
         SymbolTableNode parent;
         Integer difference;
         do {
-            difference = current.getValue().compareTo(value);
+            difference = value.compareTo(current.getValue());
             parent = current;
             if(difference<0){
                 current = current.getLeftChild();
@@ -29,13 +29,17 @@ public class SymbolTableBSTImpl implements SymbolTable{
         if(Objects.isNull(current)){
             if(difference<0){
                 parent.setLeftChild(new SymbolTableNode(nextPosition, value));
-            }
-            if(difference>0){
+            }else{
                 parent.setRightChild(new SymbolTableNode(nextPosition, value));
             }
             nextPosition += 1;
             return nextPosition-1;
         }
         return parent.getPosition();
+    }
+
+    @Override
+    public String toString() {
+        return root.toString();
     }
 }

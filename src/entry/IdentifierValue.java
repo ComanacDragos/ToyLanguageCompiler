@@ -1,6 +1,6 @@
 package entry;
 
-public class IdentifierValue {
+public class IdentifierValue implements Value{
     String baseValue;
 
     public IdentifierValue(String baseValue) {

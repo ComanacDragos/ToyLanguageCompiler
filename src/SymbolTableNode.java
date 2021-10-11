@@ -34,4 +34,14 @@ public class SymbolTableNode {
     public void setRightChild(SymbolTableNode rightChild) {
         this.rightChild = rightChild;
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "\"position\":\"" + position +
+                "\", \"value\":\"" + value.toString().replace("\"", "\\\"") +
+                "\", \"leftChild\":" + leftChild +
+                ", \"rightChild\":" + rightChild +
+                '}';
+    }
 }
