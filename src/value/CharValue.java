@@ -1,4 +1,4 @@
-package entry;
+package value;
 
 public class CharValue implements Value{
     Character baseValue;

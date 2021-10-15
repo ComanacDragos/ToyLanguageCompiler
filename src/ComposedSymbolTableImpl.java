@@ -1,5 +1,5 @@
-import entry.IdentifierValue;
-import entry.Value;
+import value.IdentifierValue;
+import value.Value;
 
 public class ComposedSymbolTableImpl implements SymbolTable{
     SymbolTable identifierSymbolTable;

@@ -1,7 +1,6 @@
-import entry.*;
+import value.*;
 
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 /*
@@ -83,7 +82,7 @@ public class Main {
     public static void run(SymbolTable symbolTable, List<Value> tokens){
         tokens.forEach(token -> {
             Integer position = symbolTable.getPosition(token);
-            //System.out.println(token + " --> " + position);
+            System.out.println(token + " --> " + position);
         });
         System.out.println(symbolTable);
         System.out.println();

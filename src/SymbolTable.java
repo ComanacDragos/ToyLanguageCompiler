@@ -1,4 +1,4 @@
-import entry.Value;
+import value.Value;
 
 public interface SymbolTable {
     /*

@@ -1,17 +1,17 @@
-package entry;
+package value;
 
-public class BoolValue implements Value{
-    Boolean baseValue;
+public class IntValue implements Value{
+    Integer baseValue;
 
-    public BoolValue(Boolean baseValue) {
+    public IntValue(Integer baseValue) {
         this.baseValue = baseValue;
     }
 
-    public Boolean getBaseValue() {
+    public Integer getBaseValue() {
         return baseValue;
     }
 
-    public void setBaseValue(Boolean baseValue) {
+    public void setBaseValue(Integer baseValue) {
         this.baseValue = baseValue;
     }
 

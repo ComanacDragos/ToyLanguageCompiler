@@ -1,4 +1,4 @@
-package entry;
+package value;
 
 public class StringValue implements Value {
     String baseValue;

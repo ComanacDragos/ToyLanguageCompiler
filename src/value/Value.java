@@ -1,4 +1,4 @@
-package entry;
+package value;
 
 public interface Value {
     String toString();

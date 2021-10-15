@@ -1,4 +1,4 @@
-package entry;
+package value;
 
 public class FloatValue implements Value{
     Double baseValue;

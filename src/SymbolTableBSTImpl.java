@@ -1,4 +1,4 @@
-import entry.Value;
+import value.Value;
 
 import java.util.Objects;
 
@@ -35,7 +35,7 @@ public class SymbolTableBSTImpl implements SymbolTable{
             nextPosition += 1;
             return nextPosition-1;
         }
-        return parent.getPosition();
+        return current.getPosition();
     }
 
     @Override
