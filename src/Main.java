@@ -15,7 +15,14 @@ public class Main {
 
     public static void testScanner(){
         try{
-            Scanner scanner = new Scanner("data/p1.txt");
+            System.out.println("p1");
+            new Scanner("data/p1.txt");
+            System.out.println("p2");
+            new Scanner("data/p2.txt");
+            System.out.println("p3");
+            new Scanner("data/p3.txt");
+            System.out.println("p_err");
+            new Scanner("data/p_err.txt");
         }catch (CompilerError e){
             System.out.println(e.toString());
         }

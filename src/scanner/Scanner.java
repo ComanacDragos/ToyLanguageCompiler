@@ -34,13 +34,17 @@ public class Scanner {
             String lineStr = programLines.get(line-1);
 
             List<String> intermediateTokens = Arrays.stream(lineStr.split(
-                "((?<="+ separators + ")|(?="+ separators +"))|(\s(?=([^\"]*\"[^\"]*\")*[^\"]*$))")
+                "(\s(?=([^\"]*\"[^\"]*\")*[^\"]*$))|((?<="+ separators + ")|(?="+ separators +"))")
                 )
                 .filter(token -> !token.matches("^\s*$")
                 ).collect(Collectors.toList());
             int index = 0;
             while (index != intermediateTokens.size()){
-                String token = intermediateTokens.get(index);
+                String token = intermediateTokens.get(index).trim();
+                if(token.equals("")) {
+                    index++;
+                    continue;
+                }
 
                 //look ahead
                 if(index != intermediateTokens.size() - 1){
@@ -51,9 +55,13 @@ public class Scanner {
                         case "!", "=" -> nextToken.equals("=");
                         default -> false;
                     };
-                    if(index != 0 && token.equals("+") || token.equals("-")){
+                    if(index != 0 && (token.equals("+") || token.equals("-"))){
                         String previousToken = intermediateTokens.get(index-1);
-                        addNextToken = !previousToken.equals("id") && !previousToken.equals("constant") && tokenEncode.containsKey(previousToken);
+                        addNextToken = !previousToken.equals("id")
+                                && !previousToken.equals("constant")
+                                && tokenEncode.containsKey(previousToken)
+                                && (nextToken.matches(patterns.get(Type.INT))
+                                    || nextToken.matches(patterns.get(Type.FLOAT)));
                     }
                     if(addNextToken){
                         token += nextToken;
