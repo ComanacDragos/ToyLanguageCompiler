@@ -1,4 +1,6 @@
-import value.Value;
+package scanner.symbolTable;
+
+import scanner.symbolTable.value.Value;
 
 public class SymbolTableNode {
     Integer position;
@@ -39,7 +41,7 @@ public class SymbolTableNode {
     public String toString() {
         return "{" +
                 "\"position\":\"" + position +
-                "\", \"value\":\"" + value.toString().replace("\"", "\\\"") +
+                "\", \"scanner.symbolTable.value\":\"" + value.toString().replace("\"", "\\\"") +
                 "\", \"leftChild\":" + leftChild +
                 ", \"rightChild\":" + rightChild +
                 '}';

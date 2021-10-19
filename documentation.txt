@@ -3,35 +3,35 @@ https://github.com/ComanacDragos/ToyLanguageCompiler
 Value
 // default implementation: compares lexicographically the string representation of the Value with
 // the string representation of the otherValue. If the representations are equal 0 is returned
-// If the Value representation is less than otherValue representation a negative value is returned
-// otherwise a positive value is returned
+// If the Value representation is less than otherValue representation a negative scanner.symbolTable.value is returned
+// otherwise a positive scanner.symbolTable.value is returned
 default Integer compareTo(Value otherValue)
 
 BoolValue, CharValue, FloatValue, IdentifierValue, IntValue, StringValue are implementing Value
 and each have a baseValue and their representation according to the specification
 
-SymbolTableNode has the following attributes
+scanner.symbolTable.SymbolTableNode has the following attributes
     Integer position; // position in the symbol table
-    Value value; // the value in the symbol table
-    SymbolTableNode leftChild; // reference to the leftChild
-    SymbolTableNode rightChild; // reference to the rightChild
+    Value scanner.symbolTable.value; // the scanner.symbolTable.value in the symbol table
+    scanner.symbolTable.SymbolTableNode leftChild; // reference to the leftChild
+    scanner.symbolTable.SymbolTableNode rightChild; // reference to the rightChild
 
-public interface SymbolTable {
+public interface scanner.symbolTable.SymbolTable {
     /*
-    Returns the position of the value if the value exists,
-     otherwise it inserts the value and returns the new position
+    Returns the position of the scanner.symbolTable.value if the scanner.symbolTable.value exists,
+     otherwise it inserts the scanner.symbolTable.value and returns the new position
      */
-    Integer getPosition(Value value);
+    Integer getPosition(Value scanner.symbolTable.value);
 }
 
-public class SymbolTableBSTImpl implements SymbolTable and has the following attributes
-    int nextPosition = 0; // represents the position of the next value to be inserted
-    SymbolTableNode root; // represents the root of the tree
+public class scanner.symbolTable.SymbolTableBSTImpl implements scanner.symbolTable.SymbolTable and has the following attributes
+    int nextPosition = 0; // represents the position of the next scanner.symbolTable.value to be inserted
+    scanner.symbolTable.SymbolTableNode root; // represents the root of the tree
 
 
-ComposedSymbolTableImpl implements SymbolTable and has 2 symbol tables
-    SymbolTable identifierSymbolTable; // for identifiers
-    SymbolTable constantSymbolTable; // for constants
+scanner.symbolTable.ComposedSymbolTableImpl implements scanner.symbolTable.SymbolTable and has 2 symbol tables
+    scanner.symbolTable.SymbolTable identifierSymbolTable; // for identifiers
+    scanner.symbolTable.SymbolTable constantSymbolTable; // for constants
 
 
 

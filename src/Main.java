@@ -1,26 +1,29 @@
-import value.*;
+import errors.CompilerError;
+import scanner.Scanner;
+import scanner.symbolTable.ComposedSymbolTableImpl;
+import scanner.symbolTable.SymbolTable;
+import scanner.symbolTable.SymbolTableBSTImpl;
+import scanner.symbolTable.value.*;
 
 import java.util.Arrays;
 import java.util.List;
 
-/*
-VAR H,F,K,A: INTEGER;
-BEGIN
-READ(H);
-READ(Y);
-K:=H+Y;
-IF K>5 THEN BEGIN
-A:=K+H
-END
-ELSE
-A:=K+Y;
-WRITE(A)
-
-END.
- */
-
 public class Main {
     public static void main(String[] args) {
+        testScanner();
+    }
+
+    public static void testScanner(){
+        try{
+            Scanner scanner = new Scanner("data/p1.txt");
+        }catch (CompilerError e){
+            System.out.println(e.toString());
+        }
+
+    }
+
+    public static void testSymbolTable(String[] args) {
+
         List<Value> tokens1 = Arrays.asList(
                 new IdentifierValue("H"),
                 new IdentifierValue("F"),
@@ -65,6 +68,7 @@ public class Main {
         runComposedSymbolTable(tokens1);
         runComposedSymbolTable(tokens2);
     }
+
 
     public static void runOneSymbolTable(List<Value> tokens){
         SymbolTable oneSymbolTable = new SymbolTableBSTImpl();

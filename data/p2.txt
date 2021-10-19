@@ -1,0 +1,11 @@
+int a=9;
+int b=6;
+while(a!=b){
+	if (a>b){
+		a=a-b;
+	}
+	if (a<b){
+		b=b-a;
+	}
+}
+>>a." is the gcd";

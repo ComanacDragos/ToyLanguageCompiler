@@ -1,4 +1,4 @@
-package value;
+package scanner.symbolTable.value;
 
 public class CharValue implements Value{
     Character baseValue;

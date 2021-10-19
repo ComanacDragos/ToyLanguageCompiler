@@ -1,4 +1,4 @@
-package value;
+package scanner.symbolTable.value;
 
 public class FloatValue implements Value{
     Double baseValue;

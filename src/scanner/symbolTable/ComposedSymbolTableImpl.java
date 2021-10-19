@@ -1,7 +1,9 @@
-import value.IdentifierValue;
-import value.Value;
+package scanner.symbolTable;
 
-public class ComposedSymbolTableImpl implements SymbolTable{
+import scanner.symbolTable.value.IdentifierValue;
+import scanner.symbolTable.value.Value;
+
+public class ComposedSymbolTableImpl implements SymbolTable {
     SymbolTable identifierSymbolTable;
     SymbolTable constantSymbolTable;
 

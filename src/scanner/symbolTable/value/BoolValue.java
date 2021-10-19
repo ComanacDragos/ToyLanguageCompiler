@@ -1,4 +1,4 @@
-package value;
+package scanner.symbolTable.value;
 
 public class BoolValue implements Value{
     Boolean baseValue;

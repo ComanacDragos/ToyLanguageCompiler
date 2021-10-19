@@ -1,9 +1,9 @@
-package value;
+package scanner.symbolTable.value;
 
-public class StringValue implements Value {
+public class IdentifierValue implements Value{
     String baseValue;
 
-    public StringValue(String baseValue) {
+    public IdentifierValue(String baseValue) {
         this.baseValue = baseValue;
     }
 
@@ -17,6 +17,6 @@ public class StringValue implements Value {
 
     @Override
     public String toString() {
-        return "\"" + baseValue + "\"";
+        return baseValue;
     }
 }
