@@ -2,6 +2,9 @@ package scanner.symbolTable;
 
 import scanner.symbolTable.value.*;
 
+/*
+    Type factory that generates the corresponding Value class given a token and a type
+ */
 public class TypeFactory {
     public static Value getValue(String token, Type type){
         return switch (type){

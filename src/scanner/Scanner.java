@@ -11,12 +11,21 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Scanner {
+    //program split by newline
     List<String> programLines;
+    //map which encodes each token that can appear in the program
     Map<String, Integer> tokenEncode = new HashMap<>();
+    //tokens of the program -- first column of PIF
     List<String> tokens = new ArrayList<>();
+    //the position of each token in the symbol table -- second column in PIF
     List<Integer> tokensPositionInSymbolTable = new ArrayList<>();
+    //the line of each token in the program -- third line in PIF
     List<Integer> tokensLines = new ArrayList<>();
+
+
     SymbolTable symbolTable = new SymbolTableBSTImpl();
+
+    //patterns corresponding to each constant and ID
     Map<Type, String> patterns =Map.ofEntries(
             new AbstractMap.SimpleEntry<>(Type.ID, "^[a-zA-Z]([a-zA-Z0-9_]){0,255}$"),
             new AbstractMap.SimpleEntry<>(Type.INT, "^[+-]?([1-9][0-9]*)|0$"),
@@ -26,6 +35,16 @@ public class Scanner {
             new AbstractMap.SimpleEntry<>(Type.FLOAT, "^[+-]?(([1-9][0-9]*)|0)\\.([0-9][0-9]*)$")
     );
 
+    /*
+    Receives the program and outputs the FIP and SymbolTable to a directory corresponding to the program name
+        - program and tokens are read from file
+        - each line is split by the set of simple operators and by the white spaces that are followed
+         by at least 2 quotes
+        - empty lines are removed
+        - look ahead is applied to create composed tokens
+        - the token is processed
+        - FIP and Symbol table are written to files
+     */
     public Scanner(String program){
         programLines = readFile(program);
         readFile("data/token.in").forEach(token -> tokenEncode.put(token.trim(), tokenEncode.size() + 1));
@@ -92,6 +111,16 @@ public class Scanner {
         );
     }
 
+    /*
+    Receives a token and a line
+    PIF is represented by the 3 lists: tokens, tokensLines, tokensPositionInSymbolTable
+    Classifies the token and adds it to the PIF otherwise it throws a LexicalError at the given line
+        - if the token is an operator separator or reserved word it is added to the PIF with the given line
+        and the position -1
+        - if it is an id or a constant it is added to the PIF with the corresponding type (id or constant)
+         and to the Symbol table according to the pattern that the token matches
+        - otherwise a lexical error is thrown
+     */
     private void processToken(String token, Integer line){
         if(!token.equals("id") && !token.equals("constant") && tokenEncode.containsKey(token)){
             tokens.add(token);
@@ -113,6 +142,7 @@ public class Scanner {
         throw new LexicalError(token, line);
     }
 
+    //read the lines from a file
     public List<String> readFile(String file){
         try(BufferedReader reader = new BufferedReader(new FileReader(file))){
             return reader.lines().collect(Collectors.toList());
@@ -122,6 +152,7 @@ public class Scanner {
         return new LinkedList<>();
     }
 
+    //write to a file the content
     public void writeToFile(String file, String content){
         try(PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(file)))){
             writer.println(content);
