@@ -1,5 +1,6 @@
 a=9;
-b=6;
+a+012
+b='aa';
 if (a>b){
 	>>"a is the maximum
 }else{
