@@ -24,7 +24,7 @@ public class Main {
             System.out.println("p_err");
             new Scanner("data/p_err.txt");
         }catch (CompilerError e){
-            System.out.println(e.toString());
+            System.out.println(e);
         }
 
     }

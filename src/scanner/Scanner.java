@@ -19,9 +19,8 @@ public class Scanner {
     List<String> tokens = new ArrayList<>();
     //the position of each token in the symbol table -- second column in PIF
     List<Integer> tokensPositionInSymbolTable = new ArrayList<>();
-    //the line of each token in the program -- third line in PIF
+    //the line of each token in the program -- third column in PIF
     List<Integer> tokensLines = new ArrayList<>();
-
 
     SymbolTable symbolTable = new SymbolTableBSTImpl();
 
@@ -48,7 +47,7 @@ public class Scanner {
     public Scanner(String program){
         programLines = readFile(program);
         readFile("data/token.in").forEach(token -> tokenEncode.put(token.trim(), tokenEncode.size() + 1));
-        String separators = "[><!+\\-*/%=;\\[\\]{}(),^]";
+        String separators = "[><!+\\-*/%=;\\[\\]{}()^]";
         for(int line=1;line<=programLines.size();line++){
             String lineStr = programLines.get(line-1);
 

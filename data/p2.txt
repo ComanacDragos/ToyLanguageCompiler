@@ -8,4 +8,4 @@ while(a!=b){
 		b=b-a;
 	}
 }
->>a," is the gcd";
+>>a+" is the gcd";
