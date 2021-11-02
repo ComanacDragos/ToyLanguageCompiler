@@ -1,0 +1,16 @@
+id ::= letter{letter|digit|symbol}
+letter ::= "a"|"b"|...|"z"|"A"|...|"Z"
+digit ::= "0"|"1"|"2"|...|"9"
+symbols ::= "_"
+character = letter|digit|symbol|">"|"<"|"="|"!"|"-"|"+"|"*"|"/"|"%"|";"|"^"|","|"}"|"{"|"("|")"|"["|"]"
+
+fa ::= states"\n"alphabet"\n"initial_state"\n"final_states"\n"transitions
+
+states ::= id | id","id
+alphabet ::= character | character","character
+initial_state ::= id
+final_states ::= id | id","id
+
+transitions ::= transition | transition"\n"transition
+transition ::= id","set_of_chars","id
+set_of_chars ::= character | character{"."character}

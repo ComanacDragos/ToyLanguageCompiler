@@ -1,6 +1,7 @@
 package scanner;
 
 import errors.LexicalError;
+import fa.FiniteAutomaton;
 import scanner.symbolTable.SymbolTable;
 import scanner.symbolTable.SymbolTableBSTImpl;
 import scanner.symbolTable.Type;
@@ -8,6 +9,7 @@ import scanner.symbolTable.TypeFactory;
 
 import java.io.*;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class Scanner {
@@ -24,6 +26,9 @@ public class Scanner {
 
     SymbolTable symbolTable = new SymbolTableBSTImpl();
 
+    FiniteAutomaton integerFA = new FiniteAutomaton("data/FA_integer.in");
+    FiniteAutomaton idFA = new FiniteAutomaton("data/FA_id.in");
+
     //patterns corresponding to each constant and ID
     Map<Type, String> patterns =Map.ofEntries(
             new AbstractMap.SimpleEntry<>(Type.ID, "^[a-zA-Z]([a-zA-Z0-9_]){0,255}$"),
@@ -32,6 +37,17 @@ public class Scanner {
             new AbstractMap.SimpleEntry<>(Type.BOOL, "^true|false$"),
             new AbstractMap.SimpleEntry<>(Type.STRING, "^\"[a-zA-Z0-9_\\s]*\"$"),
             new AbstractMap.SimpleEntry<>(Type.FLOAT, "^[+-]?(([1-9][0-9]*)|0)\\.([0-9][0-9]*)$")
+    );
+
+    //similar to patterns but each value is a function that returns true if the string is of the type in the key
+    //replaces the patterns map in the implementation of the scanner
+    Map<Type, Function<String, Boolean>> acceptors = Map.ofEntries(
+            new AbstractMap.SimpleEntry<Type, Function<String, Boolean>>(Type.ID, (s)-> idFA.isAccepted(s)),
+            new AbstractMap.SimpleEntry<Type, Function<String, Boolean>>(Type.INT, (s)-> integerFA.isAccepted(s)),
+            new AbstractMap.SimpleEntry<Type, Function<String, Boolean>>(Type.CHAR, (s)->s.matches("^'[a-zA-Z0-9_]'$")),
+            new AbstractMap.SimpleEntry<Type, Function<String, Boolean>>(Type.BOOL, (s)->s.matches("^true|false$")),
+            new AbstractMap.SimpleEntry<Type, Function<String, Boolean>>(Type.STRING, (s)->s.matches("^\"[a-zA-Z0-9_\\s]*\"$")),
+            new AbstractMap.SimpleEntry<Type, Function<String, Boolean>>(Type.FLOAT, (s)->s.matches("^[+-]?(([1-9][0-9]*)|0)\\.([0-9][0-9]*)$"))
     );
 
     /*
@@ -78,8 +94,8 @@ public class Scanner {
                         addNextToken = !previousToken.equals("id")
                                 && !previousToken.equals("constant")
                                 && tokenEncode.containsKey(previousToken)
-                                && (nextToken.matches(patterns.get(Type.INT))
-                                    || nextToken.matches(patterns.get(Type.FLOAT)));
+                                && (acceptors.get(Type.INT).apply(nextToken))
+                                    || acceptors.get(Type.FLOAT).apply(nextToken);
                     }
                     if(addNextToken){
                         token += nextToken;
@@ -127,8 +143,8 @@ public class Scanner {
             tokensPositionInSymbolTable.add(-1);
             return;
         }
-        for(Map.Entry<Type, String> entry:patterns.entrySet()){
-            if(token.matches(entry.getValue())){
+        for(Map.Entry<Type, Function<String, Boolean>> entry: acceptors.entrySet()){
+            if(entry.getValue().apply(token)){
                 if(entry.getKey().equals(Type.ID))
                     tokens.add("id");
                 else

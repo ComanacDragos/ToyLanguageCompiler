@@ -1,16 +1,64 @@
 import errors.CompilerError;
+import fa.FiniteAutomaton;
 import scanner.Scanner;
 import scanner.symbolTable.ComposedSymbolTableImpl;
 import scanner.symbolTable.SymbolTable;
 import scanner.symbolTable.SymbolTableBSTImpl;
 import scanner.symbolTable.value.*;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
         testScanner();
+        //testFiniteAutomaton();
+    }
+
+    //First input: file of FA
+    //Provides the menu which allows to see the components of the FA
+    //Also it allows to input sequences and to see if they are accepted or not
+    public static void testFiniteAutomaton(){
+        try{
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+            System.out.print("FA File: ");
+            FiniteAutomaton fa = new FiniteAutomaton("data/" + reader.readLine());
+            String menu = "1. States\n2. Alphabet\n3. Initial state\n4. Final states\n5. Transitions\n6. Accept sequence";
+            while (true){
+                    System.out.println(menu);
+                    String input = reader.readLine();
+                    switch (input){
+                        case "~" -> {
+                            return;
+                        }
+                        case "1" -> System.out.println(fa.getStates());
+                        case "2"-> System.out.println(fa.getAlphabet());
+                        case "3" -> System.out.println(fa.getInitialState());
+                        case "4" -> System.out.println(fa.getFinalStates());
+                        case "5" -> fa.getTransitions().entrySet().forEach(
+                                entry-> System.out.println(
+                                        "(" + entry.getKey().getKey() + ", " + entry.getKey().getValue() + ")" +
+                                                " = " + entry.getValue())
+                        );
+                        case "6" -> {
+                            while (true){
+                                System.out.print("Sequence: ");
+                                input = reader.readLine();
+                                if(input.equals("~"))
+                                    break;
+                                System.out.println("Is accepted: " + fa.isAccepted(input));
+                            }
+
+                        }
+                        default -> System.out.println("Wrong key");
+                    }
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
     public static void testScanner(){
@@ -26,7 +74,6 @@ public class Main {
         }catch (CompilerError e){
             System.out.println(e);
         }
-
     }
 
     public static void testSymbolTable(String[] args) {
