@@ -1,5 +1,5 @@
 a=9;
-a=12
+a=1a2
 b='aa;
 if (a>b){
 	>>"a is the maximum

@@ -14,8 +14,8 @@ public class FiniteAutomaton {
     //the alphabet
     List<String> alphabet;
     //Map of transitions: the key is composed of the start state and the character
-    // and the value is the destination state
-    Map<Map.Entry<String, String>, String> transitions = new HashMap<>();
+    // and the value is a list of the destination states
+    Map<Map.Entry<String, String>, List<String>> transitions = new HashMap<>();
     //initial state
     String initialState;
 
@@ -29,9 +29,15 @@ public class FiniteAutomaton {
         for (int i = 4; i < lines.size(); i++) {
             String[] tokens = lines.get(i).split(",");
             String[] characters = tokens[1].split("\\.");
-            Arrays.stream(characters).forEach(c -> transitions.put(
-                    Map.entry(tokens[0], c), tokens[2]
-            ));
+            Arrays.stream(characters).forEach(c ->{
+                if(!transitions.containsKey(Map.entry(tokens[0], c)))
+                    transitions.put(
+                            Map.entry(tokens[0], c), Arrays.stream(tokens[2].split("\\.")).collect(Collectors.toList())
+                    );
+                else
+                    transitions.get(Map.entry(tokens[0], c)).addAll(Arrays.stream(tokens[2].split("\\.")).collect(Collectors.toList()));
+            }
+             );
         }
     }
 
@@ -43,6 +49,7 @@ public class FiniteAutomaton {
     //Recursive function that accepts the sequence
     //if the sequence is empty and the current state is in the final states it returns true, otherwise false
     //if there is no transition available from the current state then returns false
+    //if there are transitions available it checks recursive all possible transitions available with the given char
     Boolean isAcceptedRecursive(String sequence, String currentState){
         if(sequence.equals("")){
             return finalStates.contains(currentState);
@@ -50,7 +57,10 @@ public class FiniteAutomaton {
         String nextChar = String.valueOf(sequence.charAt(0));
         Map.Entry<String, String> key = Map.entry(currentState, nextChar);
         if(transitions.containsKey(key)){
-            return isAcceptedRecursive(sequence.substring(1), transitions.get(key));
+            boolean result = false;
+            for(String state : transitions.get(key))
+                result = result || isAcceptedRecursive(sequence.substring(1), state);
+            return result;
         }
         return false;
     }
@@ -67,7 +77,7 @@ public class FiniteAutomaton {
         return alphabet;
     }
 
-    public Map<Map.Entry<String, String>, String> getTransitions() {
+    public Map<Map.Entry<String, String>, List<String>> getTransitions() {
         return transitions;
     }
 

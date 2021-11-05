@@ -12,5 +12,6 @@ initial_state ::= id
 final_states ::= id | id","id
 
 transitions ::= transition | transition"\n"transition
-transition ::= id","set_of_chars","id
+transition ::= id","set_of_chars","set_of_transitions
 set_of_chars ::= character | character{"."character}
+set_of_transitions ::= id | id"."id
