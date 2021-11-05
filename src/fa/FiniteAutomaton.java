@@ -15,7 +15,7 @@ public class FiniteAutomaton {
     List<String> alphabet;
     //Map of transitions: the key is composed of the start state and the character
     // and the value is a list of the destination states
-    Map<Map.Entry<String, String>, List<String>> transitions = new HashMap<>();
+    Map<Map.Entry<String, String>, Set<String>> transitions = new HashMap<>();
     //initial state
     String initialState;
 
@@ -32,7 +32,7 @@ public class FiniteAutomaton {
             Arrays.stream(characters).forEach(c ->{
                 if(!transitions.containsKey(Map.entry(tokens[0], c)))
                     transitions.put(
-                            Map.entry(tokens[0], c), Arrays.stream(tokens[2].split("\\.")).collect(Collectors.toList())
+                            Map.entry(tokens[0], c), Arrays.stream(tokens[2].split("\\.")).collect(Collectors.toSet())
                     );
                 else
                     transitions.get(Map.entry(tokens[0], c)).addAll(Arrays.stream(tokens[2].split("\\.")).collect(Collectors.toList()));
@@ -77,7 +77,7 @@ public class FiniteAutomaton {
         return alphabet;
     }
 
-    public Map<Map.Entry<String, String>, List<String>> getTransitions() {
+    public Map<Map.Entry<String, String>, Set<String>> getTransitions() {
         return transitions;
     }
 

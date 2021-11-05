@@ -1,7 +1,7 @@
 q1,q2,q3,q4
 a,b
 q1
-q3,q4
+q3,q4,q1
 q1,a,q2.q4
 q2,b,q3
 q1,b,q3
