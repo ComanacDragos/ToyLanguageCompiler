@@ -13,6 +13,7 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 public class Main {
     public static void main(String[] args) {
@@ -25,9 +26,9 @@ public class Main {
     public static void testGrammar(){
         try{
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-            //System.out.print("Grammar File: ");
-            Grammar grammar = new Grammar("data/syntax_rules_grammar.in"); //+ reader.readLine());
-            String menu = "\n1. Non terminals\n2. Terminals\n3. Starting symbol\n4. Productions\n";
+            System.out.print("Grammar File: ");
+            Grammar grammar = new Grammar("data/" + reader.readLine());
+            String menu = "\n1. Non terminals\n2. Terminals\n3. Starting symbol\n4. Productions\n5. Productions for non terminal\n";
             while (true){
                 System.out.println(menu);
                 String input = reader.readLine();
@@ -38,12 +39,25 @@ public class Main {
                     case "1" -> grammar.getNonTerminals().forEach(System.out::println);
                     case "2" -> grammar.getTerminals().forEach(System.out::println);
                     case "3" -> System.out.println(grammar.getStartingSymbol());
-                    case "4" -> {
-                        List<Production> productions = new LinkedList<>();
-                        grammar.getTerminalToProduction().entrySet().forEach(
-                            entry -> productions.addAll(entry.getValue())
-                    );
-                        productions.stream().sorted((a, b) -> (int) (a.getId() - b.getId())).forEach(System.out::println);
+                    case "4" -> grammar.getProductions()
+                                        .values()
+                                        .stream()
+                                        .sorted((a, b) -> (int) (a.getId() - b.getId()))
+                                        .forEach(System.out::println);
+                    case "5" -> {
+                       while(true){
+                            try{
+                                System.out.print("Non terminal: ");
+                                NonTerminal nonTerminal = grammar.getNonTerminal(reader.readLine(), true);
+                                grammar.getNonTerminalToProduction().get(nonTerminal)
+                                        .stream()
+                                        .sorted((a, b) -> (int) (a.getId() - b.getId()))
+                                        .forEach(System.out::println);
+                                break;
+                            }catch (CompilerError error){
+                                System.out.println(error.getMessage());
+                            }
+                        }
                     }
                     default -> System.out.println("Wrong key");
                 }

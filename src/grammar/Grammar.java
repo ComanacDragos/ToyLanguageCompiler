@@ -13,7 +13,7 @@ public class Grammar {
     Set<Terminal> terminals = new HashSet<>();
     NonTerminal startingSymbol;
     HashMap<Long, Production> productions = new HashMap<>();
-    HashMap<NonTerminal, List<Production>> terminalToProduction = new HashMap<>();
+    HashMap<NonTerminal, List<Production>> nonTerminalToProduction = new HashMap<>();
 
     public Grammar(String file){
         List<String> lines = readFile(file);
@@ -48,11 +48,11 @@ public class Grammar {
                 productions.add(production);
                 this.productions.put(production.getId(), production);
             });
-            terminalToProduction.put(lhs, productions);
+            nonTerminalToProduction.put(lhs, productions);
         }
     }
 
-    NonTerminal getNonTerminal(String representation, boolean throwException){
+    public NonTerminal getNonTerminal(String representation, boolean throwException){
         for(NonTerminal nonTerminal : nonTerminals)
             if(nonTerminal.getRepresentation().equals(representation))
                 return nonTerminal;
@@ -61,7 +61,7 @@ public class Grammar {
         return null;
     }
 
-    Terminal getTerminal(String representation, boolean throwException){
+    public Terminal getTerminal(String representation, boolean throwException){
         for(Terminal terminal : terminals)
             if(terminal.getRepresentation().equals(representation))
                 return terminal;
@@ -86,8 +86,8 @@ public class Grammar {
         return productions;
     }
 
-    public HashMap<NonTerminal, List<Production>> getTerminalToProduction() {
-        return terminalToProduction;
+    public HashMap<NonTerminal, List<Production>> getNonTerminalToProduction() {
+        return nonTerminalToProduction;
     }
 
     //read the lines from a file
