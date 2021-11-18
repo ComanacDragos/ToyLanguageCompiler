@@ -30,6 +30,19 @@ public class Production {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Production that = (Production) o;
+        return Objects.equals(lhs, that.lhs) && Objects.equals(rhs, that.rhs);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(lhs, rhs);
+    }
+
+    @Override
     public String toString() {
         return id + ". " + lhs + " -> " + rhs.stream()
                                         .map(Symbol::toString)

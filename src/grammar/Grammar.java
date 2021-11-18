@@ -13,7 +13,7 @@ public class Grammar {
     Set<Terminal> terminals = new HashSet<>();
     NonTerminal startingSymbol;
     HashMap<Long, Production> productions = new HashMap<>();
-    HashMap<NonTerminal, List<Production>> nonTerminalToProduction = new HashMap<>();
+    HashMap<NonTerminal, Set<Production>> nonTerminalToProduction = new HashMap<>();
 
     public Grammar(String file){
         List<String> lines = readFile(file);
@@ -29,7 +29,7 @@ public class Grammar {
                 continue;
             String[] tokens = lines.get(i).split("::=");
             NonTerminal lhs = getNonTerminal(tokens[0].trim(), true);
-            List<Production> productions = new LinkedList<>();
+            Set<Production> productions = new HashSet<>();
             Arrays.stream(tokens[1].trim().split("\\|")).forEach(productionString ->{
                 List<Symbol> rhs = new LinkedList<>();
                 Arrays.stream(productionString.trim().split(" ")).forEach(representation ->{
@@ -46,10 +46,15 @@ public class Grammar {
                 });
                 Production production = new Production(lhs, rhs);
                 productions.add(production);
-                this.productions.put(production.getId(), production);
             });
-            nonTerminalToProduction.put(lhs, productions);
+            if(nonTerminalToProduction.containsKey(lhs))
+                nonTerminalToProduction.get(lhs).addAll(productions);
+            else
+                nonTerminalToProduction.put(lhs, productions);
         }
+        nonTerminalToProduction.entrySet()
+                .forEach(entry -> entry.getValue()
+                        .forEach(production -> productions.put(production.getId(), production)));
     }
 
     public NonTerminal getNonTerminal(String representation, boolean throwException){
@@ -86,7 +91,7 @@ public class Grammar {
         return productions;
     }
 
-    public HashMap<NonTerminal, List<Production>> getNonTerminalToProduction() {
+    public HashMap<NonTerminal, Set<Production>> getNonTerminalToProduction() {
         return nonTerminalToProduction;
     }
 
