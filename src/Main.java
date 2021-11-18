@@ -1,5 +1,6 @@
 import errors.CompilerError;
 import fa.FiniteAutomaton;
+import grammar.*;
 import scanner.Scanner;
 import scanner.symbolTable.ComposedSymbolTableImpl;
 import scanner.symbolTable.SymbolTable;
@@ -10,12 +11,53 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
         //testScanner();
-        testFiniteAutomaton();
+        //testFiniteAutomaton();
+        //testSymbols();
+        testGrammar();
+    }
+
+    public static void testGrammar(){
+        try{
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+            //System.out.print("Grammar File: ");
+            Grammar grammar = new Grammar("data/syntax_rules_grammar.in"); //+ reader.readLine());
+            String menu = "\n1. Non terminals\n2. Terminals\n3. Starting symbol\n4. Productions\n";
+            while (true){
+                System.out.println(menu);
+                String input = reader.readLine();
+                switch (input) {
+                    case "~" -> {
+                        return;
+                    }
+                    case "1" -> grammar.getNonTerminals().forEach(System.out::println);
+                    case "2" -> grammar.getTerminals().forEach(System.out::println);
+                    case "3" -> System.out.println(grammar.getStartingSymbol());
+                    case "4" -> {
+                        List<Production> productions = new LinkedList<>();
+                        grammar.getTerminalToProduction().entrySet().forEach(
+                            entry -> productions.addAll(entry.getValue())
+                    );
+                        productions.stream().sorted((a, b) -> (int) (a.getId() - b.getId())).forEach(System.out::println);
+                    }
+                    default -> System.out.println("Wrong key");
+                }
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void testSymbols(){
+        Symbol a1 = new NonTerminal("a");
+        Symbol a2 = new Terminal("a");
+        System.out.println(a1.equals(a2)); // false
     }
 
     //First input: file of FA

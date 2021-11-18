@@ -1,0 +1,5 @@
+S A
+a b c d e
+S
+S ::= a S | b S c | d A
+A ::= d c | e

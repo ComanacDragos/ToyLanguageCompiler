@@ -1,0 +1,33 @@
+program statement_list statement simple_statement compound_statement simple_type array_type type expression binary_operator unary_operator declaration_statement iostatement assignment_statement if_statement else_branch while_statement
+id constant int char bool string float >> << while if else and or ! + - * / % > < >= <= != == = ; [ ] { } ( ) , ^
+program
+program ::= statement_list
+statement_list ::= statement | statement statement_list
+statement ::= simple_statement | compound_statement
+
+simple_statement ::= assignment_statement ; | iostatement ; | declaration_statement ;
+
+compound_statement ::= if_statement | while_statement
+
+simple_type ::= bool | char | int | string | float
+
+array_type ::= simple_type [ constant ]
+
+type ::= simple_type | array_type
+
+expression ::= constant | id | id [ constant ] | expression binary_operator expression | unary_operator expression | ( expression )
+
+declaration_statement ::= type id | type id = expression
+
+iostatement ::= << id | >> expression
+
+assignment_statement ::= id = expression
+
+if_statement ::= if ( expression ) { statement_list } else_branch
+else_branch ::= epsilon | else { statement_list }
+
+while_statement ::= while ( expression ) { statement_list }
+
+unary_operator ::= !
+binary_operator ::= + | - | * | / | ^ | % | and | or | > | < | >= | <=| != | ==
+
