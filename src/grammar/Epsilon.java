@@ -1,7 +1,7 @@
 package grammar;
 
 public class Epsilon extends Symbol{
-    protected Epsilon() {
+    public Epsilon() {
         super("epsilon");
     }
 }

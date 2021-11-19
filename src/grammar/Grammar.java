@@ -9,12 +9,19 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Grammar {
-    Set<NonTerminal> nonTerminals = new HashSet<>();
-    Set<Terminal> terminals = new HashSet<>();
-    NonTerminal startingSymbol;
-    HashMap<Long, Production> productions = new HashMap<>();
-    HashMap<NonTerminal, Set<Production>> nonTerminalToProduction = new HashMap<>();
+    Set<NonTerminal> nonTerminals = new HashSet<>(); // set of non-terminals
+    Set<Terminal> terminals = new HashSet<>(); // set of terminals
+    NonTerminal startingSymbol; // starting symbol
+    HashMap<Long, Production> productions = new HashMap<>(); // maps the id of a production to the respective production
+    HashMap<NonTerminal, Set<Production>> nonTerminalToProduction = new HashMap<>(); // maps a non-terminal to all it's productions
 
+    /*
+    The file containing a grammar is processed
+    First line: the non-terminals separated by space
+    Second line: terminals separated by space
+    Third line: starting symbol
+    Remaining lines: productions: lhs is separated by rhs by ::= and | is used to separate rhs. List of symbols is separated by space
+     */
     public Grammar(String file){
         List<String> lines = readFile(file);
         if(lines.size() == 0)
@@ -28,7 +35,12 @@ public class Grammar {
             if(lines.get(i).trim().length() == 0)
                 continue;
             String[] tokens = lines.get(i).split("::=");
-            NonTerminal lhs = getNonTerminal(tokens[0].trim(), true);
+            NonTerminal lhs;
+            try{
+                lhs = getNonTerminal(tokens[0].trim(), true);
+            }catch (CompilerError compilerError){
+                throw new CompilerError("Grammar is not context free");
+            }
             Set<Production> productions = new HashSet<>();
             Arrays.stream(tokens[1].trim().split("\\|")).forEach(productionString ->{
                 List<Symbol> rhs = new LinkedList<>();
@@ -57,6 +69,11 @@ public class Grammar {
                         .forEach(production -> productions.put(production.getId(), production)));
     }
 
+    /*
+    Returns the non-terminal with the given representation from the list of non-terminals
+    If the non-terminal does not exist and throwException is true, an exception is thrown
+    If the non-terminal does not exist and throwException is false null is returned
+     */
     public NonTerminal getNonTerminal(String representation, boolean throwException){
         for(NonTerminal nonTerminal : nonTerminals)
             if(nonTerminal.getRepresentation().equals(representation))
@@ -66,6 +83,11 @@ public class Grammar {
         return null;
     }
 
+    /*
+    Returns the terminal with the given representation from the list of terminals
+    If the terminal does not exist and throwException is true, an exception is thrown
+    If the terminal does not exist and throwException is false null is returned
+     */
     public Terminal getTerminal(String representation, boolean throwException){
         for(Terminal terminal : terminals)
             if(terminal.getRepresentation().equals(representation))

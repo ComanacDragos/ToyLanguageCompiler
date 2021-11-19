@@ -5,10 +5,10 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class Production {
-    public static long nextId = 0;
-    Long id;
-    NonTerminal lhs;
-    List<Symbol> rhs;
+    public static long nextId = 0; // global id
+    Long id; // local id
+    NonTerminal lhs; // left-hand side of the production
+    List<Symbol> rhs; // right-hand side of the production
 
     public Production(NonTerminal lhs, List<Symbol> rhs){
         this.rhs = rhs;
