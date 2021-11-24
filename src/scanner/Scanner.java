@@ -175,4 +175,8 @@ public class Scanner {
         e.printStackTrace();
         }
     }
+
+    public List<String> getTokens() {
+        return tokens;
+    }
 }

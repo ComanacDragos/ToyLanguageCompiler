@@ -41,7 +41,7 @@ public class Grammar {
             }catch (CompilerError compilerError){
                 throw new CompilerError("Grammar is not context free");
             }
-            Set<Production> productions = new HashSet<>();
+            Set<Production> productions = new LinkedHashSet<>();
             Arrays.stream(tokens[1].trim().split("\\|")).forEach(productionString ->{
                 List<Symbol> rhs = new LinkedList<>();
                 Arrays.stream(productionString.trim().split(" ")).forEach(representation ->{
@@ -67,6 +67,17 @@ public class Grammar {
         nonTerminalToProduction.entrySet()
                 .forEach(entry -> entry.getValue()
                         .forEach(production -> productions.put(production.getId(), production)));
+    }
+
+    public Production getNextProductionForNonTerminal(Long previousId){
+        NonTerminal nonTerminal = productions.get(previousId).getLhs();
+        long nextId = previousId + 1;
+        while(!productions.containsKey(nextId) && nextId < Production.nextId)
+            nextId += 1;
+        Production production = productions.get(nextId);
+        if(Objects.nonNull(production) && production.getLhs().equals(nonTerminal))
+            return production;
+        return null;
     }
 
     /*

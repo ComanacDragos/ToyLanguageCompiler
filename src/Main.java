@@ -1,15 +1,19 @@
 import errors.CompilerError;
 import fa.FiniteAutomaton;
 import grammar.*;
+import parser.Parser;
 import scanner.Scanner;
 import scanner.symbolTable.ComposedSymbolTableImpl;
 import scanner.symbolTable.SymbolTable;
 import scanner.symbolTable.SymbolTableBSTImpl;
 import scanner.symbolTable.value.*;
+import tests.TestParser;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,7 +24,65 @@ public class Main {
         //testScanner();
         //testFiniteAutomaton();
         //testSymbols();
-        testGrammar();
+        //testGrammar();
+        //testParser();
+        new TestParser();
+        testScannerAndParser();
+    }
+
+    public static void testScannerAndParser(){
+        try{
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+            while (true){
+                System.out.print("program: ");
+                try{
+                    String input = reader.readLine();
+                    if(input.equals("~"))
+                        return;
+                    Scanner scanner = new Scanner("data/" + input);
+                    Parser parser = new Parser("data/syntax.in", false);
+                    parser.parse(scanner.getTokens());
+                    System.out.println("Program is correct");
+                }catch (FileNotFoundException e){
+                    System.out.println("Bad file");
+                }
+                catch (CompilerError e){
+                    System.out.println(e.getMessage());
+                }
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void testParser(){
+        try{
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+            System.out.print("Grammar file: ");
+            String grammarFile = reader.readLine();
+            while (true){
+                System.out.print("Sequence: ");
+                try{
+                    String input = reader.readLine();
+                    if(input.equals("~"))
+                        return;
+                    Parser parser = new Parser("data/" + grammarFile, false);
+                    List<String> sequence = new LinkedList<>();
+                    for(int i=0;i<input.length();i+=1)
+                        sequence.add(String.valueOf(input.charAt(i)));
+                    parser.parse(sequence);
+                    System.out.println("Sequence is correct");
+                }catch (FileNotFoundException e){
+                    System.out.println("Bad file");
+                }
+                catch (CompilerError e){
+                    System.out.println(e.getMessage());
+                }
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
     public static void testGrammar(){
@@ -51,7 +113,7 @@ public class Main {
                                 NonTerminal nonTerminal = grammar.getNonTerminal(reader.readLine(), true);
                                 grammar.getNonTerminalToProduction().get(nonTerminal)
                                         .stream()
-                                        .sorted((a, b) -> (int) (a.getId() - b.getId()))
+                                        //.sorted((a, b) -> (int) (a.getId() - b.getId()))
                                         .forEach(System.out::println);
                                 break;
                             }catch (CompilerError error){
@@ -72,6 +134,8 @@ public class Main {
         Symbol a1 = new NonTerminal("a");
         Symbol a2 = new Terminal("a");
         System.out.println(a1.equals(a2)); // false
+        System.out.println(a1 instanceof  NonTerminal); // true
+        System.out.println(a1 instanceof  Terminal); // false
     }
 
     //First input: file of FA
@@ -125,8 +189,13 @@ public class Main {
             new Scanner("data/p2.txt");
             System.out.println("p3");
             new Scanner("data/p3.txt");
+
+            System.out.println("p.txt");
+            new Scanner("data/p.txt");
+
             System.out.println("p_err");
             new Scanner("data/p_err.txt");
+
         }catch (CompilerError e){
             System.out.println(e);
         }
