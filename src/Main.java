@@ -28,6 +28,18 @@ public class Main {
         testParser();
         new TestParser();
         //testScannerAndParser();
+        //testGenerateTree();
+    }
+
+    public static void testGenerateTree(){
+        try{
+            Scanner scanner = new Scanner("data/p.txt");
+            Parser parser = new Parser("data/syntax.in", false);
+            parser.parse(scanner.getTokens(), "data/p");
+            System.out.println("Program is correct");
+        }catch (CompilerError error){
+            System.out.println(error.getMessage());
+        }
     }
 
     public static void testScannerAndParser(){
@@ -41,7 +53,7 @@ public class Main {
                         return;
                     Scanner scanner = new Scanner("data/" + input);
                     Parser parser = new Parser("data/syntax.in", false);
-                    parser.parse(scanner.getTokens());
+                    parser.parse(scanner.getTokens(), "data/" + input.split("\\.")[0]);
                     System.out.println("Program is correct");
                 }catch (FileNotFoundException e){
                     System.out.println("Bad file");
@@ -71,7 +83,7 @@ public class Main {
                     List<String> sequence = new LinkedList<>();
                     for(int i=0;i<input.length();i+=1)
                         sequence.add(String.valueOf(input.charAt(i)));
-                    parser.parse(sequence);
+                    parser.parse(sequence, "data/sequence");
                     System.out.println("Sequence is correct");
                 }catch (FileNotFoundException e){
                     System.out.println("Bad file");

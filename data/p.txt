@@ -1,9 +1,2 @@
 int[256] a;
 int i=0;
-int n;
-<<n;
-if (i<n){
-	<<a[i];
-	i=i+1;
-}
-n=0;

@@ -36,7 +36,7 @@ public class Parser {
     }
 
     // performs Recursive descendent algorithm on the given sequence
-    public void parse(List<String> sequence){
+    public void parse(List<String> sequence, String outputDir){
         init();
         int step = 0;
         if(enableLogs)
@@ -83,6 +83,9 @@ public class Parser {
         } else {
             if(enableLogs)
                 System.out.println("Sequence accepted");
+            TreeGenerator generator = new TreeGenerator(workingStack, grammar);
+            generator.generateTree();
+            generator.toFile(outputDir);
         }
     }
 
