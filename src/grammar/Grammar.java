@@ -69,6 +69,10 @@ public class Grammar {
                         .forEach(production -> productions.put(production.getId(), production)));
     }
 
+    /*
+       For a given production id returns the next production of the left-hand side if it exists
+       Otherwise return null
+     */
     public Production getNextProductionForNonTerminal(Long previousId){
         NonTerminal nonTerminal = productions.get(previousId).getLhs();
         long nextId = previousId + 1;

@@ -26,6 +26,7 @@ public class Parser {
         this.enableLogs = enableLogs;
     }
 
+    // initializes the parser state
     public void init(){
         currentState = ParserState.NormalState;
         i = 0;
@@ -34,6 +35,7 @@ public class Parser {
         inputStack.push(grammar.getStartingSymbol());
     }
 
+    // performs Recursive descendent algorithm on the given sequence
     public void parse(List<String> sequence){
         init();
         int step = 0;
