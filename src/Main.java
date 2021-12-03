@@ -25,9 +25,9 @@ public class Main {
         //testFiniteAutomaton();
         //testSymbols();
         //testGrammar();
-        testParser();
+        //testParser();
         new TestParser();
-        //testScannerAndParser();
+        testScannerAndParser();
         //testGenerateTree();
     }
 

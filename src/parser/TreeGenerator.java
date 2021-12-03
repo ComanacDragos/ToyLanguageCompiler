@@ -30,33 +30,6 @@ public class TreeGenerator {
                 grammar.getProductions().get(nonTerminalWithProduction.getProductionId()).getRhs());
     }
 
-    public void add(NonTerminal value, List<Symbol> children){
-        if(Objects.isNull(root))
-            root = new Node(value, children);
-        else{
-            Deque<Node> stack = new ArrayDeque<>();
-            root.getChildren().forEach(stack::push);
-            while (!stack.isEmpty()){
-                Node node = stack.pop();
-                if(node.getValue() instanceof NonTerminal){
-                    NonTerminal nonTerminal = (NonTerminal) node.getValue();
-                    if(node.getChildren().size() == 0){
-                        if(!nonTerminal.equals(value))
-                            throw new CompilerError("Values do not match: " + value + " != " + nonTerminal);
-                        Deque<Node> reverseStack = new ArrayDeque<>();
-                        children.stream().map(Node::new).forEach(newNode -> {
-                            node.getChildren().add(newNode);
-                            reverseStack.push(node);
-                        });
-                        while (!reverseStack.isEmpty())
-                            stack.push(reverseStack.pop());
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
     public void toFile(String outputDir){
         new File(outputDir).mkdirs();
         try(PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(outputDir + "/PT.csv")))){
