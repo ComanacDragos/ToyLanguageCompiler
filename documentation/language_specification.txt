@@ -8,11 +8,12 @@ unary_operator ::= "!"
 binary_operator ::= "+" | "-" | "*" | "/" | "^" | "%" 
 					| "and" | "or" 
 					| ">" | "<" | ">=" | "<="| "!=" | "==" 
+					
 
 
 operator ::= "=" | unary_operator | binary_operator
 
-separators ::= "[" | "]" | "{" | "}" | ";" | "space" | "newline"
+separators ::= "[" | "]" | "{" | "}" | "(" | ")" | ";" | "space" | "newline"
 
 identifier ::= letter{letter|digit|symbol}\{0,255\} //at most 256 characters
 
@@ -29,13 +30,7 @@ string ::= {character|\s}
 
 const_bool ::= "true" | "false"
 
-reserved_words ::= "if" 
-				| "while" 
-				| "bool" 
-				| "char" 
-				| "int" 
-				| "string" 
-				| "float"
+reserved_words ::= "if" | "while" | "bool" | "char" | "int" | "string" | "float"
 				
 // Syntax
 
@@ -148,7 +143,7 @@ while(a!=b){
 		b=b-a;
 	}
 }
->>a." is the gcd";
+>>a+" is the gcd";
 
 p3
 #prints the square of the elements of an array
@@ -162,7 +157,7 @@ while (i<n){
 }
 i=0;
 while (i<n){
-	>>"square of",a[i]," is ",a[i]^2;
+	>>"square of"+a[i]+" is "+a[i]^2;
 	i=i+1;
 }
 

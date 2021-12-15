@@ -1,0 +1,55 @@
+
+%{
+#include <stdio.h>
+int line = 0;
+
+%}
+
+%option noyywrap
+
+NUMBER                          [1-9][0-9]*
+
+OPERATOR                        [-+*/^%<>=!]|">="|"<="|"!="|"=="
+IO                              "<<"|">>"
+
+SEPARATOR                       \[|\]|\{|\}|\(|\)|;
+
+ID                              [a-zA-Z][a-zA-Z0-9_]{0,255}
+
+CHARACTER                       [a-zA-Z0-9_]
+
+RESERVED                        "if"|"while"|"bool"|"char"|"int"|"string"|"float"
+
+%%
+
+{NUMBER}{ID}|"+0"|"-0"          {printf("Error: %s on line: %d\n", yytext, line);}
+
+{IO}                            printf("IO: %s\n", yytext);
+{OPERATOR}                      printf("Operator: %s\n", yytext);
+{SEPARATOR}                     printf("Separator: %s\n", yytext);
+[+-]?{NUMBER}|"0"               printf("Int: %s\n", yytext);
+[+-]?({NUMBER}|"0")"."[0-9]+    printf("Float: %s\n", yytext);
+"'"{CHARACTER}"'"               printf("Char: %s\n", yytext);
+\"({CHARACTER}|[ ])*\"          printf("String: %s\n", yytext);
+"true"|"false"                  printf("Bool: %s\n", yytext);
+{RESERVED}                      printf("Reserved: %s\n", yytext);
+
+{ID}                            printf("ID: %s\n", yytext);
+[ \t]+                          /* eat up whitespace */
+[\n]                            {line++;}
+.                               {printf("Error: %s on line: %d\n", yytext, line);}
+
+
+%%
+
+void main(argc, argv)
+int argc;
+char **argv;
+{
+++argv, --argc;
+if(argc>0)
+yyin = fopen(argv[0], "r");
+else
+yyin = stdin;
+yylex();
+}
