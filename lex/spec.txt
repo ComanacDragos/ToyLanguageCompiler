@@ -1,4 +1,3 @@
-
 %{
 #include <stdio.h>
 int line = 0;
@@ -22,7 +21,7 @@ RESERVED                        "if"|"while"|"bool"|"char"|"int"|"string"|"float
 
 %%
 
-{NUMBER}{ID}|"+0"|"-0"          {printf("Error: %s on line: %d\n", yytext, line);}
+[0-9]+{ID}|"+0"|"-0"|[+-]?"0"[0-9]+             {printf("Error: %s on line: %d\n", yytext, line);}
 
 {IO}                            printf("IO: %s\n", yytext);
 {OPERATOR}                      printf("Operator: %s\n", yytext);
@@ -53,3 +52,53 @@ else
 yyin = stdin;
 yylex();
 }
+
+
+
+int a=9;
+int b=6;
+if(a>b){
+        >>"a is the maximum";
+}else{
+        >>"b is the maximum";
+}
+
+Reserved: int
+ID: a
+Operator: =
+Int: 9
+Separator: ;
+Reserved: int
+ID: b
+Operator: =
+Int: 6
+Separator: ;
+Reserved: if
+Separator: (
+ID: a
+Operator: >
+ID: b
+Separator: )
+Separator: {
+IO: >>
+String: "a is the maximum"
+Separator: ;
+Separator: }
+ID: else
+Separator: {
+IO: >>
+String: "b is the maximum"
+Separator: ;
+Separator: }
+
+
++091
+Error: +091 on line: 0
+"asdass asd
+Error: " on line: 1
+ID: asdass
+ID: asd
+'aa'
+Error: ' on line: 2
+ID: aa
+Error: ' on line: 2
