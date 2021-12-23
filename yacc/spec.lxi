@@ -1,0 +1,66 @@
+%{
+#include <stdio.h>
+#include "y.tab.h"
+
+int line = 0;
+
+%}
+
+%option noyywrap
+
+NUMBER                          [1-9][0-9]*
+
+BINARY_OPERATOR                 [-+*/^%<>]|">="|"<="|"!="|"=="
+UNARY_OPERATOR                  [!]
+
+SEPARATOR                       \[|\]|\{|\}|\(|\)|;
+
+ID                              [a-zA-Z][a-zA-Z0-9_]{0,255}
+
+CHARACTER                       [a-zA-Z0-9_]
+
+RESERVED                        "if"|"while"|"bool"|"char"|"int"|"string"|"float"
+
+%%
+
+[0-9]+{ID}|"+0"|"-0"|[+-]?"0"[0-9]+             {yyerror(yytext, line);}
+
+"<<"                            {printf("READ: %s\n", yytext); return READ;}
+">>"                            {printf("WRITE: %s\n", yytext); return WRITE;}
+
+{BINARY_OPERATOR}               {printf("Binary operator: %s\n", yytext); return BINARY_OPERATOR;}
+{UNARY_OPERATOR}                {printf("Unary operator: %s\n", yytext); return UNARY_OPERATOR;}
+
+"if"                            {printf("Reserved: if\n"); return IF;}
+"while"                         {printf("Reserved: while\n"); return WHILE;}
+"else"                          {printf("Reserved: else\n"); return ELSE;}
+"bool"                          {printf("Reserved: bool\n"); return BOOL;}
+"char"                          {printf("Reserved: char\n"); return CHAR;}
+"int"                           {printf("Reserved: int\n"); return INT;}
+"string"                        {printf("Reserved: string\n"); return STRING;}
+"float"                         {printf("Reserved: float\n"); return FLOAT;}
+"="                             {printf("Assign: =\n"); return ASSIGN;}
+
+";"                             {printf("Sep: ;\n"); return SEMICOLON;}
+"["                             {printf("Sep: [\n"); return OPEN_SQUARE;}
+"]"                             {printf("Sep: ]\n"); return CLOSED_SQUARE;}
+"("                             {printf("Sep: (\n"); return OPEN_ROUND;}
+")"                             {printf("Sep: )\n"); return CLOSED_ROUND;}
+"{"                             {printf("Sep: {\n"); return OPEN_BRACKET;}
+"}"                             {printf("Sep: }\n"); return CLOSED_BRACKET;}
+
+
+
+[+-]?{NUMBER}|"0"               {printf("Int: %s\n", yytext); return INT_CONST;}
+[+-]?({NUMBER}|"0")"."[0-9]+    {printf("Float: %s\n", yytext); return CONST;}
+"'"{CHARACTER}"'"               {printf("Char: %s\n", yytext); return CONST;}
+\"({CHARACTER}|[ ])*\"          {printf("String: %s\n", yytext); return CONST;}
+"true"|"false"                  {printf("Bool: %s\n", yytext); return CONST;}
+
+{ID}                            {printf("ID: %s\n", yytext); return ID;}
+[ \t]+                          /* eat up whitespace */
+[\n]                            {line++;}
+.                               {yyerror(yytext, line);}
+
+
+%%
